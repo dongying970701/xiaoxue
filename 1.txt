@@ -1,0 +1,46 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+
+from email.mime.multopart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+def add_attachment(file):
+    with open(file,'r') as fp:
+        mime=MIMEBase('application','octect-string',filename=file)
+        mime.add_header("Content-Disposition",'attachment')
+        mime.add_header("Content-ID","<0>")
+        mime.addheader("X-attachment-ID","0")
+        mime.set_payload(fp.read())
+        encoders.encode_base64(mime)
+        att_msg.attach(mime)
+
+from_addr="1264410250@qq.com"
+to_addr=from_addr
+sever_addr="smtp..qq.com"
+psw='rbqmawsnjbwlgagg'
+
+#创建邮件正文对象
+contents="Hello World!"
+msg=MIMEText(contents,'plain','utf-8')
+#msg['From'],msg['To']=from_addr,to_addr
+#msg['Subject']="Test"
+ 
+#创建带附件的邮件对象
+att_msg=MIMEMultipart()
+att_msg['From']=from_addr
+att_msg['To']=to_addr
+att_msg['Subject']="Test"
+
+att_msg.attach(msg)#将正文添加到带福建的邮件对象
+
+#批量添加附件
+att=["test.txt","test2.txt"]
+for a in att:
+	add_attachment(a)
+	
+
+sever=smtplib.SMTP(sever_addr,25)
+sever.login(frok_addr,psw)
+sever.sendmail(from_addr,[to_addr],msg,as_string())att_msg=MIMEMultipart()
+sever.quit()
